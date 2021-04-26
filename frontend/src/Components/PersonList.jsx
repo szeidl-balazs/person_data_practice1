@@ -7,6 +7,8 @@ const PersonList = () => {
 
 	const [serverData, setServerData] = useState([]);
 	const [isLoaded, setIsLoaded] = useState(false);
+	const [sortedData, setSortedData] = useState([]);
+	
 
 	//dummy api key: 60848a2b8bc5251343d0e22a
 	const APP_ID = '60848a2b8bc5251343d0e22a';
@@ -18,7 +20,6 @@ const PersonList = () => {
 		.then((result) => {
 			setServerData(result);
 			setIsLoaded(true);			
-			
 		},
 
 		(error) => {
@@ -29,6 +30,7 @@ const PersonList = () => {
 		);
 
 	}, []);
+
 
 	let personsArray = serverData.data;
 
@@ -41,35 +43,31 @@ const PersonList = () => {
 		
 		showData();	
 
+	
+	const sortNamesAZ = () => {	
+		setSortedData(personsArray.sort((a, b) => {return ((a.lastName > b.lastName) - (a.lastName < b.lastName))}));
+	}
+
+	const sortNamesZA = () => {
+		setSortedData(personsArray.sort((a, b) => {return ((a.lastName < b.lastName) - (a.lastName > b.lastName))}));
+	}
+
+
+	console.log('sorted data')
+	console.log(sortedData);
+
 	return (
 		<div>
+			<button onClick={sortNamesAZ}>{`sort A\u279cZ`}</button>
+			<button onClick={sortNamesZA}>{`sort Z\u279cA`}</button>
 
 			{
 				!isLoaded ? <LoadingMask /> :
-				personsArray.map((person) => <Person key={person.id} person={person} />)	
-				
+				personsArray.map((person) => <Person key={person.id} person={person} />)				
 			}
-
+		
 		</div>
 	);
 }
 
 export default PersonList;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
